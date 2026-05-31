@@ -5,3 +5,4 @@ TimedPetriNetEditor = "7252c1cf-8fc5-4de6-b5e2-fa104fd9e573"
 
 [compat]
 Documenter = "1"
+MaxPlus = "0.4.0"
