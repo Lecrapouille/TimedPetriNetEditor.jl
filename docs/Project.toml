@@ -1,0 +1,7 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+MaxPlus = "41177cfe-c387-11e9-2806-edd030e4594e"
+TimedPetriNetEditor = "7252c1cf-8fc5-4de6-b5e2-fa104fd9e573"
+
+[compat]
+Documenter = "1"
