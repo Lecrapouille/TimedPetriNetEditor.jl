@@ -35,6 +35,33 @@ Pkg.instantiate()
 include("docs/make.jl")
 ```
 
+## GitHub Pages (`github.io`)
+
+The site is published at **[https://lecrapouille.github.io/TimedPetriNetEditor.jl](https://lecrapouille.github.io/TimedPetriNetEditor.jl)**.
+
+Documenter builds the HTML locally and, on CI, pushes it to the `gh-pages` branch. To set this up on a new repository:
+
+1. **Push** this repository to GitHub (`Lecrapouille/TimedPetriNetEditor.jl`).
+2. **Enable GitHub Pages** in the repository settings:
+   - *Settings* → *Pages*
+   - *Build and deployment* → *Source*: **Deploy from a branch**
+   - *Branch*: **`gh-pages`** / **`/ (root)`**
+3. **Push to `master` or `main`**. The CI *Documentation* job runs `docs/make.jl`, which calls `deploydocs` and creates or updates `gh-pages`.
+4. After a minute or two, the site is live at `https://<user>.github.io/TimedPetriNetEditor.jl/`.
+
+No `DOCUMENTER_KEY` is required when deploying to `gh-pages` on the same repository: the workflow passes `GITHUB_TOKEN` (with `contents: write`). The key is only needed for [TagBot](https://github.com/JuliaRegistries/TagBot.jl) release tags.
+
+To deploy manually from your machine (optional):
+
+```julia
+ENV["GITHUB_REPOSITORY"] = "Lecrapouille/TimedPetriNetEditor.jl"
+ENV["GITHUB_TOKEN"] = "<personal access token with repo scope>"
+ENV["GITHUB_EVENT_NAME"] = "push"
+include("docs/make.jl")
+```
+
+Each push to the default branch refreshes the *dev* documentation (`devurl = "master"` in `docs/make.jl`).
+
 ## Registering the package
 
 `MaxPlus.jl` is already in General; this package is not. To register it:

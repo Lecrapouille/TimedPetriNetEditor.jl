@@ -200,25 +200,28 @@ function clear!(pn::PetriNet)
 end
 
 """
-    petri_editor!(pn::PetriNet)
+    petri_editor!(pn::PetriNet; critical_cycle=false)
 
 Launch the GUI editor to edit the net graphically. Once ESCAPE is pressed the
-editor quits and modifications are applied on the net.
+editor quits and modifications are applied on the net. Pass `critical_cycle=true`
+to highlight the critical cycle and open its report dialog on startup.
 """
-function petri_editor!(pn::PetriNet)
+function petri_editor!(pn::PetriNet; critical_cycle::Bool = false)
     _checklib()
-    ccall((:petri_editor, libtpne), Bool, (Clonglong,), pn.handle) || throw_error()
+    ccall((:petri_editor, libtpne), Bool, (Clonglong, Ptr{Cchar}, Bool),
+          pn.handle, C_NULL, critical_cycle) || throw_error()
 end
 
 """
-    petri_editor(pn::PetriNet)
+    petri_editor(pn::PetriNet; critical_cycle=false)
 
 Duplicate the Petri net and launch the GUI editor on the copy. The original net
 is left unmodified. Return the new handle.
 """
-function petri_editor(pn::PetriNet)
+function petri_editor(pn::PetriNet; critical_cycle::Bool = false)
     pn1 = petri_net(pn)
-    ccall((:petri_editor, libtpne), Bool, (Clonglong,), pn1.handle) || throw_error()
+    ccall((:petri_editor, libtpne), Bool, (Clonglong, Ptr{Cchar}, Bool),
+          pn1.handle, C_NULL, critical_cycle) || throw_error()
     return pn1
 end
 
@@ -587,7 +590,7 @@ function show_cr_graph(G::AbstractString; editor::Bool = false)
     import_flowshop!(pn, G)
     ccall((:petri_show_critical_cycle, libtpne), Bool, (Clonglong,), pn.handle)
     res = find_critical_cycle(pn)
-    editor && petri_editor!(pn)
+    editor && petri_editor!(pn; critical_cycle = true)
     return res
 end
 
